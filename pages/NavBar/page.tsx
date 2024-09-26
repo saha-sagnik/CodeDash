@@ -15,7 +15,7 @@ const Navbar = () => {
             <ul className="text-white flex flex-row items-center justify-center space-x-4">
                 <SearchBar/>
             </ul>
-            <LoginButton>
+            <LoginButton children="" mode="redirect">
             <Button>
                 Login
             </Button>

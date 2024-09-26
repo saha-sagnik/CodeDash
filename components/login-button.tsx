@@ -1,5 +1,8 @@
 "use client"
 
+import { useRouter } from "next/navigation";
+
+
 interface LoginButtonProps{
     children:React.ReactNode;
     mode: "modal" | "redirect",
@@ -7,9 +10,19 @@ interface LoginButtonProps{
 }
 
 export const LoginButton = ({children,mode='redirect',asChild}:LoginButtonProps)=>{
+
+    const router = useRouter();
     
     const onClick = ()=>{
-        console.log("Button Cicked");
+        router.push("/auth/login");
+    }
+
+    if(mode==="modal"){
+        return(
+            <span>
+                TBD
+            </span>
+        )
     }
     
     return (
