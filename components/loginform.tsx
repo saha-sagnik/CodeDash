@@ -13,20 +13,41 @@ import { LoginSchema } from "@/schema";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FormError } from "./form-error";
+import { login } from "@/actions/login";
+import { useState, useTransition } from "react";
 
 const LoginForm = () => {
 
-    const form = useForm<z.infer<typeof LoginSchema>>({
-        resolver: zodResolver(LoginSchema),
-        defaultValues: {
-            email:"",
-            password:"",
-        },
-    });
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>)=>{
-        console.log(values)
-    }
+    const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+
+    
+    startTransition(() => {
+      login(values)
+        .then((data) => {
+          if (data.error) {
+            setError(data.error);
+          } else {
+            setSuccess(data.success);
+          }
+        })
+        .catch((err) => {
+          setError("An unexpected error occurred.");
+        });
+    });
+  };
 
     return ( 
         <CardWrapper
@@ -43,6 +64,7 @@ const LoginForm = () => {
                         <FormField
                         control={form.control}
                         name="email"
+                      
                         render={({field})=>(
                             <FormItem>
                                 <FormLabel>
@@ -50,6 +72,7 @@ const LoginForm = () => {
                                     <FormControl>
                                         <Input
                                         {...field}
+                                        disabled={isPending}
                                         placeholder="codedash@email.com"
                                         type="email"
                                         />
@@ -62,6 +85,7 @@ const LoginForm = () => {
                               <FormField
                         control={form.control}
                         name="password"
+                        
                         render={({field})=>(
                             <FormItem>
                                 <FormLabel>
@@ -69,6 +93,7 @@ const LoginForm = () => {
                                     <FormControl>
                                         <Input
                                         {...field}
+                                        disabled={isPending}
                                         placeholder="Your password"
                                         type="password"
                                         />
@@ -81,6 +106,7 @@ const LoginForm = () => {
                     </div>
                     <FormError message="Something Went Wrong"/>
                     <Button
+                    disabled={isPending}
                     type="submit"
                     className="w-full"
                     >
