@@ -9,41 +9,42 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FormControl,FormMessage,FormDescription, Form, FormField,FormItem, FormLabel } from "@/components/ui/form";
 
-import { LoginSchema } from "@/schema";
+import { RegisterSchema} from "@/schema";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FormError, FormSucess } from "./form-error";
-import { login } from "@/actions/login";
+import { register } from "@/actions/register";
 import { useState, useTransition } from "react";
 
-const LoginForm = () => {
+const RegisterForm= () => {
 
 
     const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: "",
       password: "",
+      name:"",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     setError("");
     setSuccess("");
 
     
     startTransition(() => {
-      login(values)
+      register(values)
         .then((data) => {
-          
+          if (data.error) {
             setError(data.error);
-          
+          } else {
             setSuccess(data.success);
-         
+          }
         })
         .catch((err) => {
           setError("An unexpected error occurred.");
@@ -53,9 +54,9 @@ const LoginForm = () => {
 
     return ( 
         <CardWrapper
-        headerLabel="Welcome Back"
-        backButtonLabel="Don't have an account?"
-        backButtonhref="/auth/register"
+        headerLabel="Create your account"
+        backButtonLabel="Already have an account?"
+        backButtonhref="/auth/login"
         addSocial
         >
         <Form  {...form}>
@@ -63,11 +64,39 @@ const LoginForm = () => {
                 className="space-y-4"
                 >
                     <div className="space-y-4">
+
+                    <FormField
+                        control={form.control}
+                        name="name"
+                      
+                        render={({field})=>(
+
+                          
+                            <FormItem>
+                                <FormLabel>
+                                    Your Name
+                                    <FormControl>
+                                        <Input
+                                        {...field}
+                                        disabled={isPending}
+                                        placeholder="Your Name"
+                                        
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormLabel>
+                            </FormItem>
+                        )}
+                        />
+
+
                         <FormField
                         control={form.control}
                         name="email"
                       
                         render={({field})=>(
+
+                          
                             <FormItem>
                                 <FormLabel>
                                     Email
@@ -113,7 +142,7 @@ const LoginForm = () => {
                     type="submit"
                     className="w-full"
                     >
-                        Login
+                        Create an Account
                     </Button>
             </form>
         </Form>
@@ -121,4 +150,4 @@ const LoginForm = () => {
      );
 }
  
-export default LoginForm;
+export default RegisterForm;
