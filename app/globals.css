@@ -8,6 +8,27 @@ body,
   height: 100%
 }
 
+@font-face {
+  font-family: 'Blox2';
+  src: url('/fonts/Blox2.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'KarmaFuture';
+  src: url('/fonts/KarmaFuture.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'WhereMyKeys';
+  src: url('/fonts/WhereMyKeys.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 @layer base {
   :root {

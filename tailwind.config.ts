@@ -9,6 +9,11 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		fontFamily:{
+			blox: ['Blox2', 'sans-serif'],
+			karma: ['KarmaFuture', 'sans-serif'],
+			keys: ['WhereMyKeys', 'sans-serif'],
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
